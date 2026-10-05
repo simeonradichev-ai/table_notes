@@ -475,7 +475,12 @@ def build_app(page: ft.Page):
         )
 
         return ft.Column(
-            controls=[ft.Row([dt], scroll=ft.ScrollMode.ALWAYS)],
+            controls=[
+                ft.Row(
+                    controls=[dt],
+                    scroll=ft.ScrollMode.ALWAYS,
+                )
+            ],
             scroll=ft.ScrollMode.ALWAYS,
             expand=True,
         )
@@ -519,10 +524,13 @@ def build_app(page: ft.Page):
 
     def refresh_table():
         update_save_status()
-        table_container.content = build_table()
+        table_container.controls = [build_table()]
         page.update()
 
-    table_container = ft.Container(content=build_table(), expand=True)
+    table_container = ft.Column(
+        controls=[build_table()],
+        expand=True,
+    )
 
     page.add(
         ft.Row(
