@@ -14,7 +14,7 @@ def build_app(page: ft.Page):
     # Статус за запазване
     save_status_text = ft.Text(
         f"Запазено в {db.last_saved_time}",
-        size=12,
+        size=11,
         color=ft.Colors.GREEN_400,
     )
 
@@ -62,7 +62,7 @@ def build_app(page: ft.Page):
             search_field.value = ""
             refresh_table()
 
-    # Нова таблица
+    # Диалог: Нова таблица
     def open_new_table_dialog(e):
         name_field = ft.TextField(
             label="Име на новата таблица", autofocus=True
@@ -94,7 +94,7 @@ def build_app(page: ft.Page):
         dialog.open = True
         page.update()
 
-    # Дублиране
+    # Диалог: Дублиране
     def open_duplicate_table_dialog(e):
         curr_name = db.current_filename[:-5]
         name_field = ft.TextField(
@@ -112,7 +112,7 @@ def build_app(page: ft.Page):
             page.update()
 
         dialog = ft.AlertDialog(
-            title=ft.Text("Дублиране на таблицата"),
+            title=ft.Text("Дублиране на таблица"),
             content=name_field,
             actions=[
                 ft.TextButton(
@@ -127,7 +127,7 @@ def build_app(page: ft.Page):
         dialog.open = True
         page.update()
 
-    # Изтриване
+    # Диалог: Изтриване
     def open_delete_table_dialog(e):
         def confirm_delete(e_dlg):
             db.delete_current_table()
@@ -159,7 +159,7 @@ def build_app(page: ft.Page):
         dialog.open = True
         page.update()
 
-    # Настройки на колона
+    # Диалог: Настройки на колона
     def open_column_dialog(col_idx, current_name):
         rename_field = ft.TextField(value=current_name, autofocus=True)
 
@@ -250,8 +250,8 @@ def build_app(page: ft.Page):
     search_field = ft.TextField(
         hint_text="Търсене в таблицата...",
         prefix_icon=ft.Icons.SEARCH,
-        expand=True,
         dense=True,
+        expand=True,
         on_change=lambda e: refresh_table(),
     )
 
@@ -264,7 +264,7 @@ def build_app(page: ft.Page):
         db.delete_row(row_idx)
         refresh_table()
 
-    # Сглобяване на мобилната решетка (Cards)
+    # Сглобяване на мобилните карти за редовете
     def build_cards_view():
         query = search_field.value.strip().lower() if search_field.value else ""
         cards = []
@@ -319,8 +319,9 @@ def build_app(page: ft.Page):
                     label=col_name,
                     multiline=True,
                     min_lines=1,
-                    max_lines=4,
+                    max_lines=3,
                     dense=True,
+                    expand=True,
                     text_style=ft.TextStyle(
                         weight=(
                             ft.FontWeight.BOLD
@@ -332,12 +333,11 @@ def build_app(page: ft.Page):
                     on_change=lambda e, r=row_idx, c=col_idx: on_cell_change(
                         r, c, e.control.value
                     ),
-                    expand=True,
                 )
 
                 bold_btn = ft.IconButton(
                     icon=ft.Icons.FORMAT_BOLD,
-                    icon_size=18,
+                    icon_size=20,
                     selected=is_bold,
                     on_click=lambda e, r=row_idx, c=col_idx: [
                         db.toggle_cell_bold(r, c),
@@ -351,7 +351,7 @@ def build_app(page: ft.Page):
 
                 color_menu = ft.PopupMenuButton(
                     icon=ft.Icons.COLOR_LENS_OUTLINED,
-                    icon_size=18,
+                    icon_size=20,
                     items=[
                         ft.PopupMenuItem(
                             content=ft.Text("Основен"),
@@ -383,12 +383,11 @@ def build_app(page: ft.Page):
                 fields_list.append(
                     ft.Row(
                         [field, bold_btn, color_menu],
-                        alignment=ft.MainAxisAlignment.CENTER,
-                        spacing=2,
+                        alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                        spacing=0,
                     )
                 )
 
-            # Бутони за управление на конкретния ред
             row_actions = ft.Row(
                 [
                     ft.Text(
@@ -440,7 +439,6 @@ def build_app(page: ft.Page):
                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
             )
 
-            # Мобилна Карта за реда
             card_content = ft.Card(
                 content=ft.Container(
                     padding=10,
@@ -466,12 +464,12 @@ def build_app(page: ft.Page):
 
         return ft.Column(controls=cards, spacing=10)
 
-    # Лента за Колони (управление и пренареждане на колоните)
+    # Лента за управление на колоните
     def build_columns_bar():
         col_buttons = []
         for c_idx, col_name in enumerate(db.columns):
             btn = ft.OutlinedButton(
-                content=ft.Text(col_name, size=12, weight=ft.FontWeight.BOLD),
+                content=ft.Text(col_name, size=11, weight=ft.FontWeight.BOLD),
                 on_click=lambda e, idx=c_idx, name=col_name: open_column_dialog(
                     idx, name
                 ),
@@ -486,10 +484,10 @@ def build_app(page: ft.Page):
 
         return ft.Column(
             [
-                ft.Text("Колони (натисни за настройки):", size=11, color=ft.Colors.GREY_600),
+                ft.Text("Управление на колони:", size=11, color=ft.Colors.GREY_600),
                 ft.Row(
                     [*col_buttons, add_col_btn],
-                    scroll=ft.ScrollMode.ALWAYS,
+                    scroll=ft.ScrollMode.AUTO,
                 ),
             ],
             spacing=2,
@@ -538,12 +536,17 @@ def build_app(page: ft.Page):
         spacing=10,
     )
 
-    # Горно мобилно меню
+    # Защитено от преливане мобилно меню
     top_menu = ft.Column(
         [
             ft.Row(
                 [
                     tables_dropdown,
+                    ft.IconButton(
+                        icon=ft.Icons.NOTE_ADD_OUTLINED,
+                        tooltip="Нова таблица",
+                        on_click=open_new_table_dialog,
+                    ),
                     ft.IconButton(
                         icon=ft.Icons.COPY_OUTLINED,
                         tooltip="Дублирай таблица",
@@ -561,24 +564,15 @@ def build_app(page: ft.Page):
             ft.Row(
                 [
                     search_field,
-                    ft.IconButton(
-                        icon=ft.Icons.NOTE_ADD_OUTLINED,
-                        tooltip="Нова таблица",
-                        on_click=open_new_table_dialog,
-                    ),
-                ]
-            ),
-            ft.Row(
-                [
-                    save_status_text,
                     ft.Button(
-                        "+ Добави Нов Ред",
+                        "+ Нов Ред",
                         icon=ft.Icons.ADD,
                         on_click=add_row_click,
                     ),
                 ],
                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
             ),
+            save_status_text,
         ],
         spacing=8,
     )
