@@ -5,7 +5,8 @@ from src.data import TableData
 def build_app(page: ft.Page):
     page.title = "Namari'e таблици"
     page.theme_mode = ft.ThemeMode.LIGHT
-    page.padding = 20
+    page.padding = 10
+    page.scroll = ft.ScrollMode.AUTO  # Осигурява глобален скрол за целия екран
 
     db = TableData()
 
@@ -15,11 +16,11 @@ def build_app(page: ft.Page):
             ft.Icon(
                 ft.Icons.CHECK_CIRCLE_OUTLINE,
                 color=ft.Colors.GREEN_400,
-                size=16,
+                size=14,
             ),
             ft.Text(
                 f"Запазено в {db.last_saved_time}",
-                size=12,
+                size=11,
                 color=ft.Colors.GREEN_400,
             ),
         ],
@@ -47,7 +48,7 @@ def build_app(page: ft.Page):
 
     # Падащо меню с налични таблици
     tables_dropdown = ft.Dropdown(
-        width=200,
+        width=160,
         dense=True,
         options=[ft.dropdown.Option(t) for t in db.list_tables()],
         value=db.current_filename[:-5],
@@ -163,7 +164,7 @@ def build_app(page: ft.Page):
         dialog.open = True
         page.update()
 
-    # Диалог за настройки на колона (Включва преместване наляво/надясно)
+    # Диалог за настройки на колона
     def open_column_dialog(col_idx, current_name):
         rename_field = ft.TextField(value=current_name, autofocus=True)
 
@@ -200,18 +201,16 @@ def build_app(page: ft.Page):
                     ft.Text("Име на колоната:"),
                     rename_field,
                     ft.Divider(),
-                    ft.Text("Преместване на колоната:"),
+                    ft.Text("Преместване:"),
                     ft.Row(
                         [
                             ft.Button(
                                 "← Наляво",
-                                icon=ft.Icons.ARROW_BACK,
                                 disabled=(col_idx == 0),
                                 on_click=lambda e: move_col(-1),
                             ),
                             ft.Button(
                                 "Надясно →",
-                                icon=ft.Icons.ARROW_FORWARD,
                                 disabled=(col_idx == len(db.columns) - 1),
                                 on_click=lambda e: move_col(1),
                             ),
@@ -219,17 +218,15 @@ def build_app(page: ft.Page):
                         spacing=10,
                     ),
                     ft.Divider(),
-                    ft.Text("Сортиране на редовете:"),
+                    ft.Text("Сортиране:"),
                     ft.Row(
                         [
                             ft.Button(
-                                "А - Я (Възходящо)",
-                                icon=ft.Icons.ARROW_DOWNWARD,
+                                "А - Я",
                                 on_click=lambda e: sort_col(False),
                             ),
                             ft.Button(
-                                "Я - А (Низходящо)",
-                                icon=ft.Icons.ARROW_UPWARD,
+                                "Я - А",
                                 on_click=lambda e: sort_col(True),
                             ),
                         ],
@@ -259,9 +256,9 @@ def build_app(page: ft.Page):
 
     # Поле за търсене
     search_field = ft.TextField(
-        hint_text="Търсене в таблицата...",
+        hint_text="Търсене...",
         prefix_icon=ft.Icons.SEARCH,
-        width=220,
+        width=160,
         dense=True,
         on_change=lambda e: refresh_table(),
     )
@@ -281,7 +278,7 @@ def build_app(page: ft.Page):
         header_columns = []
         for c_idx, col in enumerate(db.columns):
             header_btn = ft.Button(
-                content=ft.Text(col, weight=ft.FontWeight.BOLD, size=15),
+                content=ft.Text(col, weight=ft.FontWeight.BOLD, size=14),
                 style=ft.ButtonStyle(padding=5),
                 on_click=lambda e, idx=c_idx, name=col: open_column_dialog(
                     idx, name
@@ -289,7 +286,7 @@ def build_app(page: ft.Page):
             )
             header_columns.append(ft.DataColumn(header_btn))
 
-        header_columns.append(ft.DataColumn(ft.Text("Действия", width=150)))
+        header_columns.append(ft.DataColumn(ft.Text("Действия", width=140)))
 
         query = search_field.value.strip().lower() if search_field.value else ""
 
@@ -339,7 +336,7 @@ def build_app(page: ft.Page):
                     border=ft.InputBorder.NONE,
                     dense=True,
                     multiline=True,
-                    min_lines=2,
+                    min_lines=1,
                     max_lines=3,
                     text_style=ft.TextStyle(
                         weight=(
@@ -358,7 +355,6 @@ def build_app(page: ft.Page):
                     icon=ft.Icons.FORMAT_BOLD,
                     icon_size=16,
                     selected=is_bold,
-                    tooltip="Одебели текста",
                     on_click=lambda e, r=row_idx, c=col_idx: [
                         db.toggle_cell_bold(r, c),
                         refresh_table(),
@@ -372,10 +368,9 @@ def build_app(page: ft.Page):
                 color_menu = ft.PopupMenuButton(
                     icon=ft.Icons.COLOR_LENS_OUTLINED,
                     icon_size=16,
-                    tooltip="Изберете цвят на текста",
                     items=[
                         ft.PopupMenuItem(
-                            content=ft.Text("Основен цвят"),
+                            content=ft.Text("Основен"),
                             on_click=lambda e,
                             r=row_idx,
                             c=col_idx: set_color(r, c, "default"),
@@ -402,8 +397,8 @@ def build_app(page: ft.Page):
                 )
 
                 cell_content = ft.Container(
-                    width=280,
-                    padding=5,
+                    width=200,
+                    padding=2,
                     content=ft.Column(
                         [
                             field,
@@ -413,17 +408,15 @@ def build_app(page: ft.Page):
                                 spacing=0,
                             ),
                         ],
-                        spacing=2,
+                        spacing=0,
                     ),
                 )
 
                 cells.append(ft.DataCell(cell_content))
 
-            # Действия за ред: Нагоре, Надолу, Дублирай, Изтрий
             btn_move_up = ft.IconButton(
                 icon=ft.Icons.KEYBOARD_ARROW_UP,
-                icon_size=18,
-                tooltip="Премести реда нагоре",
+                icon_size=16,
                 on_click=lambda e, r=row_idx: [
                     db.move_row(r, -1),
                     refresh_table(),
@@ -431,8 +424,7 @@ def build_app(page: ft.Page):
             )
             btn_move_down = ft.IconButton(
                 icon=ft.Icons.KEYBOARD_ARROW_DOWN,
-                icon_size=18,
-                tooltip="Премести реда надолу",
+                icon_size=16,
                 on_click=lambda e, r=row_idx: [
                     db.move_row(r, 1),
                     refresh_table(),
@@ -440,8 +432,7 @@ def build_app(page: ft.Page):
             )
             btn_duplicate = ft.IconButton(
                 icon=ft.Icons.COPY_ALL_OUTLINED,
-                icon_size=18,
-                tooltip="Дублирай този ред",
+                icon_size=16,
                 on_click=lambda e, r=row_idx: [
                     db.duplicate_row(r),
                     refresh_table(),
@@ -449,9 +440,8 @@ def build_app(page: ft.Page):
             )
             delete_btn = ft.IconButton(
                 icon=ft.Icons.DELETE_OUTLINED,
-                icon_size=18,
+                icon_size=16,
                 icon_color=ft.Colors.RED_400,
-                tooltip="Изтрий ред",
                 on_click=lambda e, r=row_idx: delete_row(r),
             )
 
@@ -464,8 +454,8 @@ def build_app(page: ft.Page):
             table_rows.append(ft.DataRow(cells=cells))
 
         dt = ft.DataTable(
-            data_row_min_height=90,
-            data_row_max_height=130,
+            data_row_min_height=70,
+            data_row_max_height=120,
             columns=header_columns,
             rows=table_rows,
             border=ft.Border.all(1, line_color),
@@ -474,15 +464,10 @@ def build_app(page: ft.Page):
             divider_thickness=1,
         )
 
-        return ft.Column(
-            controls=[
-                ft.Row(
-                    controls=[dt],
-                    scroll=ft.ScrollMode.ALWAYS,
-                )
-            ],
+        # Опаковаме таблицата в хоризонтален скрол за мобилни екрани
+        return ft.Row(
+            controls=[dt],
             scroll=ft.ScrollMode.ALWAYS,
-            expand=True,
         )
 
     def add_row_click(e):
@@ -529,45 +514,35 @@ def build_app(page: ft.Page):
 
     table_container = ft.Column(
         controls=[build_table()],
-        expand=True,
+    )
+
+    # Добавяме горна лента, която също се скролира хоризонтално, за да не излиза от екрана
+    top_bar = ft.Row(
+        controls=[
+            ft.Text("Таблици:", size=16, weight=ft.FontWeight.BOLD),
+            tables_dropdown,
+            ft.IconButton(
+                icon=ft.Icons.COPY_OUTLINED,
+                tooltip="Дублирай",
+                on_click=open_duplicate_table_dialog,
+            ),
+            ft.IconButton(
+                icon=ft.Icons.DELETE_OUTLINE,
+                tooltip="Изтрий",
+                on_click=open_delete_table_dialog,
+            ),
+            theme_btn,
+            save_status_text,
+            search_field,
+            ft.Button("+ Таблица", on_click=open_new_table_dialog),
+            ft.Button("+ Колона", on_click=add_col_click),
+            ft.Button("+ Ред", on_click=add_row_click),
+        ],
+        scroll=ft.ScrollMode.ALWAYS,
     )
 
     page.add(
-        ft.Row(
-            [
-                ft.Row(
-                    [
-                        ft.Text(
-                            "Таблици:", size=18, weight=ft.FontWeight.BOLD
-                        ),
-                        tables_dropdown,
-                        ft.IconButton(
-                            icon=ft.Icons.COPY_OUTLINED,
-                            tooltip="Дублирай тази таблица",
-                            on_click=open_duplicate_table_dialog,
-                        ),
-                        ft.IconButton(
-                            icon=ft.Icons.DELETE_OUTLINE,
-                            tooltip="Изтрий тази таблица",
-                            on_click=open_delete_table_dialog,
-                        ),
-                        theme_btn,
-                        save_status_text,
-                    ]
-                ),
-                ft.Row(
-                    [
-                        search_field,
-                        ft.Button(
-                            "+ Нова Таблица", on_click=open_new_table_dialog
-                        ),
-                        ft.Button("+ Колона", on_click=add_col_click),
-                        ft.Button("+ Нов ред", on_click=add_row_click),
-                    ]
-                ),
-            ],
-            alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
-        ),
+        top_bar,
         ft.Divider(),
         table_container,
     )
