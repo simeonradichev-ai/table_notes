@@ -1,0 +1,272 @@
+{
+    "columns": [
+        "Заглавие",
+        "Количество",
+        "Бележка",
+        "стока",
+        "асуртимент",
+        "gfeeete",
+        "nnrfwhete"
+    ],
+    "rows": [
+        [
+            {
+                "value": "за ремонт ",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "10 части ",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "равалени ",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "релси ",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            }
+        ],
+        [
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "20",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            }
+        ],
+        [
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            }
+        ],
+        [
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "масо ",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            }
+        ],
+        [
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            }
+        ],
+        [
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            }
+        ],
+        [
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            },
+            {
+                "value": "",
+                "bold": false,
+                "color": "black"
+            }
+        ]
+    ]
+}
